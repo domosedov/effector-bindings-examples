@@ -1,15 +1,15 @@
 {
-  "name": "effector-skills",
-  "version": "0.1.0",
+  "name": "effector-rhf-binding-example",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "check": "oxfmt --check && oxlint --type-aware --check ",
+    "dev": "next dev",
+    "format": "oxfmt",
     "lint": "oxlint --type-aware",
     "lint:fix": "oxlint --type-aware --fix",
-    "format": "oxfmt",
-    "check": "oxfmt --check && oxlint --type-aware --check "
+    "start": "next start"
   },
   "dependencies": {
     "@effector/next": "^0.7.2",

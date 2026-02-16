@@ -60,13 +60,13 @@ function factoryImplementation<
     | Effect<FieldErrors<TFieldValues>, any, Error>
     | EventCallable<FieldErrors<TFieldValues>>
 }) {
-  const _formControl = createFormControl<TFieldValues, TContext, TTransformedValues>(formProps)
-  console.log(_formControl)
+  const innerFormControl = createFormControl<TFieldValues, TContext, TTransformedValues>(formProps)
+
   const formControl = {
-    ..._formControl,
-    handleSubmit: ((...args: Parameters<typeof _formControl.handleSubmit>) => {
+    ...innerFormControl,
+    handleSubmit: ((...args: Parameters<typeof innerFormControl.handleSubmit>) => {
       const [handleSubmitValid, handleSubmitInvalid] = args
-      return _formControl.handleSubmit(
+      return innerFormControl.handleSubmit(
         (values, event) => {
           if (is.unit(onSubmit) && is.targetable(onSubmit)) {
             void scopeBind(onSubmit, { safe: true })(values)
@@ -80,7 +80,7 @@ function factoryImplementation<
           return handleSubmitInvalid?.(values, event)
         },
       )
-    }) as typeof _formControl.handleSubmit,
+    }) as typeof innerFormControl.handleSubmit,
   }
 
   const $formControl = createStore(formControl)
@@ -211,7 +211,7 @@ function factoryImplementation<
     resetFieldFx,
     triggerFx,
     __: {
-      formControl: _formControl,
+      formControl,
     },
   }
 }
