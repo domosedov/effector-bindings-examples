@@ -1,8 +1,6 @@
 import type { EventCallable } from 'effector'
 import type {
-  DefaultValues,
   FieldValues,
-  Resolver,
   UseFormClearErrors,
   UseFormGetFieldState,
   UseFormGetValues,
@@ -13,12 +11,10 @@ import type {
   UseFormSetValue,
   UseFormTrigger,
 } from 'react-hook-form'
+import type { createFormControl } from 'react-hook-form'
 
 import { createFactory } from '@withease/factories'
 import { attach, createStore, is, scopeBind } from 'effector'
-import { createFormControl } from 'react-hook-form'
-
-type AsyncDefaultValues<TFieldValues> = (payload?: unknown) => Promise<TFieldValues>
 
 type Simplify<T> = { [K in keyof T]: T[K] } & {}
 
@@ -48,26 +44,15 @@ type ParamsToObject<
   }
 >
 
-type FactoryOptions<
-  TFieldValues extends FieldValues = FieldValues,
-  TContext = unknown,
-  TTransformedValues = TFieldValues,
-> = {
-  resolver: Resolver<TFieldValues, TContext, TTransformedValues>
-  defaultValues?: DefaultValues<TFieldValues> | AsyncDefaultValues<TFieldValues>
+type FactoryOptions<TFieldValues extends FieldValues = FieldValues> = {
+  formControl: ReturnType<typeof createFormControl<TFieldValues>>
   onSubmit?: EventCallable<TFieldValues>
 }
 
 function factoryImplementation<T extends FieldValues>({
-  resolver,
-  defaultValues,
+  formControl: _formControl,
   onSubmit,
 }: FactoryOptions<T>) {
-  const _formControl = createFormControl({
-    resolver,
-    defaultValues,
-  })
-
   const formControl = {
     ..._formControl,
     handleSubmit: ((...args: Parameters<typeof _formControl.handleSubmit>) => {

@@ -2,6 +2,7 @@ import { createFormFactory } from '@/form-factory'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { invoke } from '@withease/factories'
 import { createEvent } from 'effector'
+import { createFormControl } from 'react-hook-form'
 import { z } from 'zod'
 
 const userSchema = z.object({
@@ -19,19 +20,23 @@ type User = z.infer<typeof userSchema>
 
 const formSubmitted = createEvent<User>()
 
+const formControl = createFormControl({
+  resolver: zodResolver(userSchema),
+  defaultValues: {
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    address: {
+      street: '123 Main St',
+      city: 'Anytown',
+      state: 'CA',
+      zip: '12345',
+    },
+  },
+})
+
 export const formModel = invoke(() =>
   createFormFactory({
-    resolver: zodResolver(userSchema),
-    defaultValues: {
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      address: {
-        street: '123 Main St',
-        city: 'Anytown',
-        state: 'CA',
-        zip: '12345',
-      },
-    },
+    formControl,
     onSubmit: formSubmitted,
   }),
 )
