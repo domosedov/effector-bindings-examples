@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
 import { ReactQueryProvider } from '@/shared/lib/react-query/provider'
+import { Navigation } from '@/shared/ui/navigation'
 import { EffectorNext } from '@effector/next'
 import { Overpass, Overpass_Mono } from 'next/font/google'
 
@@ -8,12 +9,12 @@ import './globals.css'
 
 const overpass = Overpass({
   variable: '--font-overpass',
-  subsets: ['latin'],
+  subsets: ['cyrillic'],
 })
 
 const overpassMono = Overpass_Mono({
   variable: '--font-overpass-mono',
-  subsets: ['latin'],
+  subsets: ['cyrillic'],
 })
 
 export const metadata: Metadata = {
@@ -29,9 +30,14 @@ export default function RootLayout({
   return (
     <html lang='ru'>
       <body className={`${overpass.variable} ${overpassMono.variable} font-sans antialiased`}>
-        <EffectorNext>
-          <ReactQueryProvider>{children}</ReactQueryProvider>
-        </EffectorNext>
+        <header className='border-b border-border'>
+          <Navigation />
+        </header>
+        <main>
+          <EffectorNext>
+            <ReactQueryProvider>{children}</ReactQueryProvider>
+          </EffectorNext>
+        </main>
       </body>
     </html>
   )

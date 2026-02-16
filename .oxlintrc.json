@@ -26,14 +26,7 @@
       }
     ],
     "import/consistent-type-specifier-style": ["warn", "prefer-top-level"],
-    "typescript/consistent-type-imports": "warn",
-    "eslint/no-restricted-syntax": [
-      "error",
-      {
-        "selector": "VariableDeclarator[init.callee.name=\"useUnitShape\"] > Identifier",
-        "message": "Use destructuring to access unit values.\nconst { count, setCount } = useUnitShape(model);"
-      }
-    ]
+    "typescript/consistent-type-imports": "warn"
   },
   "settings": {
     "jsx-a11y": {

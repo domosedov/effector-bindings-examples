@@ -28,6 +28,6 @@
     "stylesheet": "./src/app/globals.css",
     "attributes": ["class", "className"],
     "functions": ["clsx", "cn", "cx", "cva", "twMerge", "tv"],
-    "preserveWhitespace": true
+    "preserveWhitespace": false
   }
 }
