@@ -1,8 +1,9 @@
-import { createFormFactory } from '@/form-factory'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { invoke } from '@withease/factories'
-import { createEffect, createEvent } from 'effector'
-import { z } from 'zod'
+import { createEffect } from 'effector'
+import * as z from 'zod'
+
+import { createFormFactory } from './form-factory'
 
 const userSchema = z.object({
   name: z.string().min(1),
@@ -16,8 +17,6 @@ const userSchema = z.object({
 })
 
 type User = z.infer<typeof userSchema>
-
-const formSubmitted = createEvent<User>()
 
 const logCreatedUserFx = createEffect<User, User, Error>((user) => {
   console.log('User created: ', user)
@@ -40,7 +39,3 @@ export const formModel = invoke(() =>
     onSubmit: logCreatedUserFx,
   }),
 )
-
-formSubmitted.watch((values) => {
-  console.log('Form submitted: ', values)
-})

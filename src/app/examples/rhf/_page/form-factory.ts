@@ -83,7 +83,9 @@ function factoryImplementation<
     }) as typeof innerFormControl.handleSubmit,
   }
 
-  const $formControl = createStore(formControl)
+  const $formControl = createStore(formControl, {
+    serialize: 'ignore',
+  })
 
   const setValueFx = attach({
     source: {

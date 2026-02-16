@@ -1,17 +1,18 @@
 import type { Metadata } from 'next'
 
+import { ReactQueryProvider } from '@/shared/lib/react-query/provider'
 import { EffectorNext } from '@effector/next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Overpass, Overpass_Mono } from 'next/font/google'
 
 import './globals.css'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const overpass = Overpass({
+  variable: '--font-overpass',
   subsets: ['latin'],
 })
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const overpassMono = Overpass_Mono({
+  variable: '--font-overpass-mono',
   subsets: ['latin'],
 })
 
@@ -26,9 +27,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en'>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <EffectorNext>{children}</EffectorNext>
+    <html lang='ru'>
+      <body className={`${overpass.variable} ${overpassMono.variable} font-sans antialiased`}>
+        <EffectorNext>
+          <ReactQueryProvider>{children}</ReactQueryProvider>
+        </EffectorNext>
       </body>
     </html>
   )
