@@ -1,8 +1,7 @@
 import { createFormFactory } from '@/form-factory'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { invoke } from '@withease/factories'
-import { createEvent } from 'effector'
-import { createFormControl } from 'react-hook-form'
+import { createEffect, createEvent, sample } from 'effector'
 import { z } from 'zod'
 
 const userSchema = z.object({
@@ -20,24 +19,25 @@ type User = z.infer<typeof userSchema>
 
 const formSubmitted = createEvent<User>()
 
-const formControl = createFormControl({
-  resolver: zodResolver(userSchema),
-  defaultValues: {
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    address: {
-      street: '123 Main St',
-      city: 'Anytown',
-      state: 'CA',
-      zip: '12345',
-    },
-  },
+const logCreatedUserFx = createEffect<User, User, Error>((user) => {
+  console.log('User created: ', user)
+  return user
 })
 
 export const formModel = invoke(() =>
   createFormFactory({
-    formControl,
-    onSubmit: formSubmitted,
+    resolver: zodResolver(userSchema),
+    defaultValues: {
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      address: {
+        street: '123 Main St',
+        city: 'Anytown',
+        state: 'CA',
+        zip: '12345',
+      },
+    },
+    onSubmit: logCreatedUserFx,
   }),
 )
 

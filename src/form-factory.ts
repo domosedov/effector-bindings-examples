@@ -1,9 +1,11 @@
-import type { EventCallable } from 'effector'
+import type { Effect, EventCallable } from 'effector'
 import type {
+  FieldErrors,
   FieldValues,
   UseFormClearErrors,
   UseFormGetFieldState,
   UseFormGetValues,
+  UseFormProps,
   UseFormReset,
   UseFormResetField,
   UseFormSetError,
@@ -11,10 +13,10 @@ import type {
   UseFormSetValue,
   UseFormTrigger,
 } from 'react-hook-form'
-import type { createFormControl } from 'react-hook-form'
 
 import { createFactory } from '@withease/factories'
 import { attach, createStore, is, scopeBind } from 'effector'
+import { createFormControl } from 'react-hook-form'
 
 type Simplify<T> = { [K in keyof T]: T[K] } & {}
 
@@ -44,25 +46,40 @@ type ParamsToObject<
   }
 >
 
-type FactoryOptions<TFieldValues extends FieldValues = FieldValues> = {
-  formControl: ReturnType<typeof createFormControl<TFieldValues>>
-  onSubmit?: EventCallable<TFieldValues>
-}
-
-function factoryImplementation<T extends FieldValues>({
-  formControl: _formControl,
+function factoryImplementation<
+  TFieldValues extends FieldValues,
+  TContext = any,
+  TTransformedValues = TFieldValues,
+>({
   onSubmit,
-}: FactoryOptions<T>) {
+  onInvalid,
+  ...formProps
+}: UseFormProps<TFieldValues, TContext, TTransformedValues> & {
+  onSubmit?: Effect<TTransformedValues, any, Error> | EventCallable<TTransformedValues>
+  onInvalid?:
+    | Effect<FieldErrors<TFieldValues>, any, Error>
+    | EventCallable<FieldErrors<TFieldValues>>
+}) {
+  const _formControl = createFormControl<TFieldValues, TContext, TTransformedValues>(formProps)
+  console.log(_formControl)
   const formControl = {
     ..._formControl,
     handleSubmit: ((...args: Parameters<typeof _formControl.handleSubmit>) => {
-      const [onValid, onInvalid] = args
-      return _formControl.handleSubmit((values, event) => {
-        if (is.event(onSubmit)) {
-          scopeBind(onSubmit, { safe: true })(values)
-        }
-        return onValid(values, event)
-      }, onInvalid)
+      const [handleSubmitValid, handleSubmitInvalid] = args
+      return _formControl.handleSubmit(
+        (values, event) => {
+          if (is.unit(onSubmit) && is.targetable(onSubmit)) {
+            void scopeBind(onSubmit, { safe: true })(values)
+          }
+          return handleSubmitValid(values, event)
+        },
+        (values, event) => {
+          if (is.unit(onInvalid) && is.targetable(onInvalid)) {
+            void scopeBind(onInvalid, { safe: true })(values)
+          }
+          return handleSubmitInvalid?.(values, event)
+        },
+      )
     }) as typeof _formControl.handleSubmit,
   }
 
@@ -74,7 +91,10 @@ function factoryImplementation<T extends FieldValues>({
     },
     effect: (
       { formControl },
-      params: ParamsToObject<Parameters<UseFormSetValue<T>>, ['name', 'value', 'options']>,
+      params: ParamsToObject<
+        Parameters<UseFormSetValue<TFieldValues>>,
+        ['name', 'value', 'options']
+      >,
     ) => {
       formControl.setValue(params.name, params.value, params.options)
     },
@@ -86,7 +106,7 @@ function factoryImplementation<T extends FieldValues>({
     },
     effect: (
       { formControl },
-      params: ParamsToObject<Parameters<UseFormReset<T>>, ['values', 'options']>,
+      params: ParamsToObject<Parameters<UseFormReset<TFieldValues>>, ['values', 'options']>,
     ) => {
       formControl.reset(params.values, params.options)
     },
@@ -98,7 +118,10 @@ function factoryImplementation<T extends FieldValues>({
     },
     effect: (
       { formControl },
-      params: ParamsToObject<Parameters<UseFormSetError<T>>, ['name', 'error', 'options']>,
+      params: ParamsToObject<
+        Parameters<UseFormSetError<TFieldValues>>,
+        ['name', 'error', 'options']
+      >,
     ) => {
       formControl.setError(params.name, params.error, params.options)
     },
@@ -110,7 +133,7 @@ function factoryImplementation<T extends FieldValues>({
     },
     effect: (
       { formControl },
-      params: ParamsToObject<Parameters<UseFormSetFocus<T>>, ['name', 'options']>,
+      params: ParamsToObject<Parameters<UseFormSetFocus<TFieldValues>>, ['name', 'options']>,
     ) => {
       formControl.setFocus(params.name, params.options)
     },
@@ -122,7 +145,7 @@ function factoryImplementation<T extends FieldValues>({
     },
     effect: (
       { formControl },
-      params: ParamsToObject<Parameters<UseFormClearErrors<T>>, ['name']>,
+      params: ParamsToObject<Parameters<UseFormClearErrors<TFieldValues>>, ['name']>,
     ) => {
       formControl.clearErrors(params.name)
     },
@@ -134,7 +157,7 @@ function factoryImplementation<T extends FieldValues>({
     },
     effect: (
       { formControl },
-      params: ParamsToObject<Parameters<UseFormGetValues<T>>, ['name', 'config']>,
+      params: ParamsToObject<Parameters<UseFormGetValues<TFieldValues>>, ['name', 'config']>,
     ) => {
       return formControl.getValues(params.name, params.config)
     },
@@ -146,7 +169,7 @@ function factoryImplementation<T extends FieldValues>({
     },
     effect: (
       { formControl },
-      params: ParamsToObject<Parameters<UseFormGetFieldState<T>>, ['name', 'formState']>,
+      params: ParamsToObject<Parameters<UseFormGetFieldState<TFieldValues>>, ['name', 'formState']>,
     ) => {
       return formControl.getFieldState(params.name, params.formState)
     },
@@ -158,7 +181,7 @@ function factoryImplementation<T extends FieldValues>({
     },
     effect: (
       { formControl },
-      params: ParamsToObject<Parameters<UseFormResetField<T>>, ['name', 'options']>,
+      params: ParamsToObject<Parameters<UseFormResetField<TFieldValues>>, ['name', 'options']>,
     ) => {
       formControl.resetField(params.name, params.options)
     },
@@ -170,7 +193,7 @@ function factoryImplementation<T extends FieldValues>({
     },
     effect: (
       { formControl },
-      params: ParamsToObject<Parameters<UseFormTrigger<T>>, ['name', 'options']>,
+      params: ParamsToObject<Parameters<UseFormTrigger<TFieldValues>>, ['name', 'options']>,
     ) => {
       return formControl.trigger(params.name, params.options)
     },
