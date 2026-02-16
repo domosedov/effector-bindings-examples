@@ -1,7 +1,7 @@
 import { createFormFactory } from '@/form-factory'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { invoke } from '@withease/factories'
-import { createEffect, createEvent, sample } from 'effector'
+import { createEffect, createEvent } from 'effector'
 import { z } from 'zod'
 
 const userSchema = z.object({
