@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Effector Skills
 
-## Getting Started
+Пет-проект для изучения Effector, React Query, react-hook-form и Next.js 16 App Router.
 
-First, run the development server:
+## TikTok Business Dashboard
+
+Личный кабинет для аналитики бизнес-аккаунта TikTok. Позволяет просматривать статистику аккаунта, анализировать видео и изучать аудиторию — всё в одном дашборде.
+
+### Возможности
+
+- **Обзор аккаунта** (`/tiktok`) — профиль, ключевые метрики (подписчики, лайки, видео), график роста подписчиков за 30 дней
+- **Статистика видео** (`/tiktok/videos`) — таблица всех видео с просмотрами, лайками, комментариями и шерами; график вовлечённости; выбор видео для детального просмотра
+- **Аналитика аудитории** (`/tiktok/audience`) — распределение по полу (PieChart), возрасту (BarChart), географии (горизонтальный BarChart), активность по часам (AreaChart)
+- **OAuth-авторизация** — вход через TikTok Business с хранением токенов в HttpOnly cookies
+- **Мок-режим** — полностью рабочий дашборд без реального TikTok API для локальной разработки
+
+### Стек
+
+- Next.js 16 (App Router), React 19
+- Effector — UI-состояние (выбранное видео, вкладки, фильтры)
+- React Query — серверное состояние с SSR prefetch
+- Mantine UI 9 — компоненты интерфейса
+- recharts — SVG-графики
+- Zod v4 — валидация данных API
+
+### Запуск
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+По умолчанию включён мок-режим (`TIKTOK_USE_MOCKS=true` в `.env.local`). Откройте [http://localhost:3000/tiktok](http://localhost:3000/tiktok) для просмотра дашборда.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Настройка реального TikTok API
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Зарегистрируйте приложение на [TikTok for Developers](https://developers.tiktok.com/)
+2. Заполните `.env.local`:
 
-## Learn More
+```
+TIKTOK_CLIENT_KEY=ваш_client_key
+TIKTOK_CLIENT_SECRET=ваш_client_secret
+TIKTOK_REDIRECT_URI=http://localhost:3000/api/tiktok/callback
+TIKTOK_USE_MOCKS=false
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Другие примеры
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **React Hook Form + Effector** (`/examples/rhf`) — форма с валидацией через Zod, интеграция RHF и Effector через `createFormFactory`
+- **React Query** (`/examples/rq`) — пример server-side prefetch с `HydrationBoundary`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Команды
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Команда       | Описание                           |
+| ------------- | ---------------------------------- |
+| `pnpm dev`    | Запуск dev-сервера                 |
+| `pnpm build`  | Production-сборка                  |
+| `pnpm lint`   | Линтинг (oxlint)                   |
+| `pnpm format` | Форматирование (oxfmt)             |
+| `pnpm check`  | Проверка форматирования и линтинга |

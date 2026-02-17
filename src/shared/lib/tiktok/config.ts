@@ -7,9 +7,8 @@ export function getTiktokConfig() {
   const clientKey = process.env.TIKTOK_CLIENT_KEY
   const clientSecret = process.env.TIKTOK_CLIENT_SECRET
   const redirectUri = process.env.TIKTOK_REDIRECT_URI ?? 'http://localhost:3000/api/tiktok/callback'
-  const encryptionKey = process.env.TOKEN_ENCRYPTION_KEY
 
-  return { clientKey, clientSecret, redirectUri, encryptionKey }
+  return { clientKey, clientSecret, redirectUri }
 }
 
 export function useMocks() {
