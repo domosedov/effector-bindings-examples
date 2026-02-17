@@ -1,5 +1,6 @@
 'use client'
 
+import { Stack, Text } from '@mantine/core'
 import { useQuery } from '@tanstack/react-query'
 
 import type { Todo } from './types'
@@ -12,10 +13,10 @@ export function TodoList() {
   })
 
   return (
-    <div>
+    <Stack gap='xs'>
       {data?.map((todo) => (
-        <div key={todo.id}>{todo.title}</div>
+        <Text key={todo.id}>{todo.title}</Text>
       ))}
-    </div>
+    </Stack>
   )
 }

@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   experimental: {
     swcPlugins: [['@effector/swc-plugin', {}]],
+    optimizePackageImports: ['@mantine/core', '@mantine/hooks'],
   },
 }
 

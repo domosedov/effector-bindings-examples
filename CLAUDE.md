@@ -18,7 +18,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **react-hook-form** v7 with `@hookform/resolvers` and **Zod v4** for form validation
 - **@withease/factories** — `createFactory` for defining reusable effector factories, `invoke` for instantiation
 - **effector-use-unit-shape** — `useUnitShape` hook for binding effector stores/effects to React components
-- **Tailwind CSS v4** via `@tailwindcss/postcss`
+- **Mantine UI 9** via `@mantine/core` and `@mantine/hooks`
 - **oxlint** / **oxfmt** for linting and formatting (not ESLint/Prettier)
 - **pnpm** as package manager
 
@@ -37,6 +37,5 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - No semicolons, single quotes, JSX single quotes (configured in `.oxfmtrc.json`)
 - Import sorting enabled via `experimentalSortImports`: type imports first, then value imports, grouped by builtin → external → internal → relative, with newlines between groups
-- Tailwind class sorting enabled via `experimentalTailwindcss` in oxfmt (stylesheet: `src/app/globals.css`)
 - Path alias: `@/*` maps to `./src/*`
 - Feature folders use `model.ts` / `ui.tsx` convention

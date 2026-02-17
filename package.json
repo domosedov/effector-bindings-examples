@@ -15,6 +15,8 @@
     "@effector/next": "^0.7.2",
     "@effector/swc-plugin": "1.0.0-next.1",
     "@hookform/resolvers": "^5.2.2",
+    "@mantine/core": "9.0.0-alpha.1",
+    "@mantine/hooks": "9.0.0-alpha.1",
     "@tanstack/react-query": "^5.90.21",
     "@withease/factories": "^1.0.5",
     "effector": "^23.4.4",
@@ -27,7 +29,6 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
     "@types/node": "^25",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -35,7 +36,9 @@
     "oxfmt": "^0.33.0",
     "oxlint": "^1.48.0",
     "oxlint-tsgolint": "^0.14.0",
-    "tailwindcss": "^4",
+    "postcss": "^8.5.6",
+    "postcss-preset-mantine": "^1.18.0",
+    "postcss-simple-vars": "^7.0.1",
     "typescript": "^5"
   }
 }

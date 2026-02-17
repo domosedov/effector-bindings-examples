@@ -3,8 +3,16 @@ import type { Metadata } from 'next'
 import { ReactQueryProvider } from '@/shared/lib/react-query/provider'
 import { Navigation } from '@/shared/ui/navigation'
 import { EffectorNext } from '@effector/next'
+import {
+  ColorSchemeScript,
+  createTheme,
+  DEFAULT_THEME,
+  mantineHtmlProps,
+  MantineProvider,
+} from '@mantine/core'
 import { Overpass, Overpass_Mono } from 'next/font/google'
 
+import '@mantine/core/styles.css'
 import './globals.css'
 
 const overpass = Overpass({
@@ -15,6 +23,14 @@ const overpass = Overpass({
 const overpassMono = Overpass_Mono({
   variable: '--font-overpass-mono',
   subsets: ['cyrillic'],
+})
+
+const theme = createTheme({
+  fontFamily: `var(--font-overpass), ${DEFAULT_THEME.fontFamily}`,
+  fontFamilyMonospace: `var(--font-overpass-mono), monospace`,
+  headings: {
+    fontFamily: `var(--font-overpass), ${DEFAULT_THEME.headings?.fontFamily ?? DEFAULT_THEME.fontFamily}`,
+  },
 })
 
 export const metadata: Metadata = {
@@ -28,16 +44,18 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='ru'>
-      <body className={`${overpass.variable} ${overpassMono.variable} font-sans antialiased`}>
-        <header className='border-b border-border'>
-          <Navigation />
-        </header>
-        <main>
-          <EffectorNext>
-            <ReactQueryProvider>{children}</ReactQueryProvider>
-          </EffectorNext>
-        </main>
+    <html lang='ru' {...mantineHtmlProps}>
+      <head>
+        <ColorSchemeScript />
+      </head>
+      <body className={`${overpass.variable} ${overpassMono.variable}`}>
+        <MantineProvider theme={theme}>
+          <Navigation>
+            <EffectorNext>
+              <ReactQueryProvider>{children}</ReactQueryProvider>
+            </EffectorNext>
+          </Navigation>
+        </MantineProvider>
       </body>
     </html>
   )

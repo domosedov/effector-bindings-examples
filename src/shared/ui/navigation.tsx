@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { Anchor, AppShell, Group } from '@mantine/core'
 import { usePathname } from 'next/navigation'
 
 const navItems = [
@@ -9,27 +9,29 @@ const navItems = [
   { href: '/examples/rq', label: 'React Query' },
 ] as const
 
-export function Navigation() {
+export function Navigation({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
   return (
-    <nav className='container-base flex items-center gap-6 py-4'>
-      {navItems.map(({ href, label }) => {
-        const isActive = href === '/' ? pathname === '/' : pathname.startsWith(href)
-        return (
-          <Link
-            key={href}
-            href={href}
-            className={
-              isActive
-                ? 'text-foreground no-underline hover:underline'
-                : 'text-muted-foreground no-underline hover:text-foreground hover:underline'
-            }
-          >
-            {label}
-          </Link>
-        )
-      })}
-    </nav>
+    <AppShell header={{ height: 60 }} padding='md'>
+      <AppShell.Header>
+        <Group h='100%' px='md' gap='lg'>
+          {navItems.map(({ href, label }) => {
+            const isActive = href === '/' ? pathname === '/' : pathname.startsWith(href)
+            return (
+              <Anchor
+                key={href}
+                href={href}
+                fw={isActive ? 600 : 400}
+                c={isActive ? undefined : 'dimmed'}
+              >
+                {label}
+              </Anchor>
+            )
+          })}
+        </Group>
+      </AppShell.Header>
+      <AppShell.Main>{children}</AppShell.Main>
+    </AppShell>
   )
 }

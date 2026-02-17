@@ -1,4 +1,5 @@
 import { createQueryClient } from '@/shared/lib/react-query/client'
+import { Container, Title } from '@mantine/core'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 
 import type { Todo } from './_page/types'
@@ -18,10 +19,12 @@ export default async function ReactQueryExamplePage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className='container-base py-8'>
-        <h1 className='mb-6'>React Query Example</h1>
+      <Container size='md' py='xl'>
+        <Title order={1} mb='lg'>
+          React Query Example
+        </Title>
         <TodoList />
-      </div>
+      </Container>
     </HydrationBoundary>
   )
 }
