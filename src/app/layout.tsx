@@ -28,9 +28,6 @@ const overpassMono = Overpass_Mono({
 const theme = createTheme({
   fontFamily: `var(--font-overpass), ${DEFAULT_THEME.fontFamily}`,
   fontFamilyMonospace: `var(--font-overpass-mono), monospace`,
-  headings: {
-    fontFamily: `var(--font-overpass), ${DEFAULT_THEME.headings?.fontFamily ?? DEFAULT_THEME.fontFamily}`,
-  },
 })
 
 export const metadata: Metadata = {
@@ -44,11 +41,15 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='ru' {...mantineHtmlProps}>
+    <html
+      lang='ru'
+      className={`${overpass.variable} ${overpassMono.variable}`}
+      {...mantineHtmlProps}
+    >
       <head>
         <ColorSchemeScript />
       </head>
-      <body className={`${overpass.variable} ${overpassMono.variable}`}>
+      <body>
         <MantineProvider theme={theme}>
           <Navigation>
             <EffectorNext>
