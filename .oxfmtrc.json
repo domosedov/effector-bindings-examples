@@ -14,7 +14,7 @@
       "value-internal",
       ["type-parent", "type-sibling", "type-index"],
       ["value-parent", "value-sibling", "value-index"],
-      "side-effect",
+      "side_effect",
       "unknown"
     ],
     "internalPattern": ["@/*"],
