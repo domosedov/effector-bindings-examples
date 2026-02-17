@@ -13,6 +13,8 @@ import {
 import { Overpass, Overpass_Mono } from 'next/font/google'
 
 import '@mantine/core/styles.css'
+// import after @mantine/core/styles.css
+import '@mantine/charts/styles.css'
 import './globals.css'
 
 const overpass = Overpass({
